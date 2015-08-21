@@ -1,104 +1,90 @@
-R Code book for 
+R Code book for run_analysis.R
+======================================
 
-The features selected for this database come from the accelerometer and gyroscope 3-axial raw signals tAcc-XYZ and tGyro-XYZ. These time domain signals (prefix 't' to denote time) were captured at a constant rate of 50 Hz. Then they were filtered using a median filter and a 3rd order low pass Butterworth filter with a corner frequency of 20 Hz to remove noise. Similarly, the acceleration signal was then separated into body and gravity acceleration signals (tBodyAcc-XYZ and tGravityAcc-XYZ) using another low pass Butterworth filter with a corner frequency of 0.3 Hz. 
+The following cleanup is preformed by run_analysis.R: 
 
-Subsequently, the body linear acceleration and angular velocity were derived in time to obtain Jerk signals (tBodyAccJerk-XYZ and tBodyGyroJerk-XYZ). Also the magnitude of these three-dimensional signals were calculated using the Euclidean norm (tBodyAccMag, tGravityAccMag, tBodyAccJerkMag, tBodyGyroMag, tBodyGyroJerkMag). 
+1. Create base data frames from unzipped files 
+2. Add the data frame column names for features (step #4 from instructions) 
+3. Concatenate columns for training dataset 
+4. Combine the two data sets (step #1 from assignment) 
+5. Get the mean and standard deviaton columns only. The entire list of the columns extracted is listed below. 
+6. Replace the numeric activiy levels with descriptive ones 
+7. Get the average metrics (features) grouped by subject and activity 
 
-Finally a Fast Fourier Transform (FFT) was applied to some of these signals producing fBodyAcc-XYZ, fBodyAccJerk-XYZ, fBodyGyro-XYZ, fBodyAccJerkMag, fBodyGyroMag, fBodyGyroJerkMag. (Note the 'f' to indicate frequency domain signals). 
+The final result is stored in a data frame called "tidy". Descriptions and tranformations of attributes in tidy are listed below:  
 
-These signals were used to estimate variables of the feature vector for each pattern:  
-'-XYZ' is used to denote 3-axial signals in the X, Y and Z directions.
+ Attribute 				Description 
+=================================	===================================
+ [1] "Activity"                   	Descriptive Activiy derrived from Y_test.txt and Y_train.txt 
+ [2] "SubjectNumber"              	Participatn Subject Number from subject_test.txt and subject_train.txt
 
-tBodyAcc-XYZ
-tGravityAcc-XYZ
-tBodyAccJerk-XYZ
-tBodyGyro-XYZ
-tBodyGyroJerk-XYZ
-tBodyAccMag
-tGravityAccMag
-tBodyAccJerkMag
-tBodyGyroMag
-tBodyGyroJerkMag
-fBodyAcc-XYZ
-fBodyAccJerk-XYZ
-fBodyGyro-XYZ
-fBodyAccMag
-fBodyAccJerkMag
-fBodyGyroMag
-fBodyGyroJerkMag 
+The following are derrived from X_test.txt and X_train.txt and represent mean values gropued by Activity and Subject. 
+See features_info.txt for more specific details about these measurments. 
 
-The set of variables that were estimated from these signals are: 
-mean(): Mean value
-std(): Standard deviation
+ [3] "tBodyAcc-mean()-X"          	
+ [4] "tBodyAcc-mean()-Y"          
+ [5] "tBodyAcc-mean()-Z"          
+ [6] "tGravityAcc-mean()-X"       
+ [7] "tGravityAcc-mean()-Y"       
+ [8] "tGravityAcc-mean()-Z"       
+ [9] "tBodyAccJerk-mean()-X"      
+[10] "tBodyAccJerk-mean()-Y"      
+[11] "tBodyAccJerk-mean()-Z"      
+[12] "tBodyGyro-mean()-X"         
+[13] "tBodyGyro-mean()-Y"         
+[14] "tBodyGyro-mean()-Z"         
+[15] "tBodyGyroJerk-mean()-X"     
+[16] "tBodyGyroJerk-mean()-Y"     
+[17] "tBodyGyroJerk-mean()-Z"     
+[18] "tBodyAccMag-mean()"         
+[19] "tGravityAccMag-mean()"      
+[20] "tBodyAccJerkMag-mean()"     
+[21] "tBodyGyroMag-mean()"        
+[22] "tBodyGyroJerkMag-mean()"    
+[23] "fBodyAcc-mean()-X"          
+[24] "fBodyAcc-mean()-Y"          
+[25] "fBodyAcc-mean()-Z"          
+[26] "fBodyAccJerk-mean()-X"      
+[27] "fBodyAccJerk-mean()-Y"      
+[28] "fBodyAccJerk-mean()-Z"      
+[29] "fBodyGyro-mean()-X"         
+[30] "fBodyGyro-mean()-Y"         
+[31] "fBodyGyro-mean()-Z"         
+[32] "fBodyAccMag-mean()"         
+[33] "fBodyBodyAccJerkMag-mean()" 
+[34] "fBodyBodyGyroMag-mean()"    
+[35] "fBodyBodyGyroJerkMag-mean()"
+[36] "tBodyAcc-std()-X"           
+[37] "tBodyAcc-std()-Y"           
+[38] "tBodyAcc-std()-Z"           
+[39] "tGravityAcc-std()-X"        
+[40] "tGravityAcc-std()-Y"        
+[41] "tGravityAcc-std()-Z"        
+[42] "tBodyAccJerk-std()-X"       
+[43] "tBodyAccJerk-std()-Y"       
+[44] "tBodyAccJerk-std()-Z"       
+[45] "tBodyGyro-std()-X"          
+[46] "tBodyGyro-std()-Y"          
+[47] "tBodyGyro-std()-Z"          
+[48] "tBodyGyroJerk-std()-X"      
+[49] "tBodyGyroJerk-std()-Y"      
+[50] "tBodyGyroJerk-std()-Z"      
+[51] "tBodyAccMag-std()"          
+[52] "tGravityAccMag-std()"       
+[53] "tBodyAccJerkMag-std()"      
+[54] "tBodyGyroMag-std()"         
+[55] "tBodyGyroJerkMag-std()"     
+[56] "fBodyAcc-std()-X"           
+[57] "fBodyAcc-std()-Y"           
+[58] "fBodyAcc-std()-Z"           
+[59] "fBodyAccJerk-std()-X"       
+[60] "fBodyAccJerk-std()-Y"       
+[61] "fBodyAccJerk-std()-Z"       
+[62] "fBodyGyro-std()-X"          
+[63] "fBodyGyro-std()-Y"          
+[64] "fBodyGyro-std()-Z"          
+[65] "fBodyAccMag-std()"          
+[66] "fBodyBodyAccJerkMag-std()"  
+[67] "fBodyBodyGyroMag-std()"     
+[68] "fBodyBodyGyroJerkMag-std()" 
 
- 
- [1] "ActivityDesc"                         
- [2] "DataSet"                    
- [3] "Subject"                    
- [4] "ActivityLevel"              
- [5] "tBodyAcc-mean()-X"          
- [6] "tBodyAcc-mean()-Y"          
- [7] "tBodyAcc-mean()-Z"          
- [8] "tGravityAcc-mean()-X"       
- [9] "tGravityAcc-mean()-Y"       
-[10] "tGravityAcc-mean()-Z"       
-[11] "tBodyAccJerk-mean()-X"      
-[12] "tBodyAccJerk-mean()-Y"      
-[13] "tBodyAccJerk-mean()-Z"      
-[14] "tBodyGyro-mean()-X"         
-[15] "tBodyGyro-mean()-Y"         
-[16] "tBodyGyro-mean()-Z"         
-[17] "tBodyGyroJerk-mean()-X"     
-[18] "tBodyGyroJerk-mean()-Y"     
-[19] "tBodyGyroJerk-mean()-Z"     
-[20] "tBodyAccMag-mean()"         
-[21] "tGravityAccMag-mean()"      
-[22] "tBodyAccJerkMag-mean()"     
-[23] "tBodyGyroMag-mean()"        
-[24] "tBodyGyroJerkMag-mean()"    
-[25] "fBodyAcc-mean()-X"          
-[26] "fBodyAcc-mean()-Y"          
-[27] "fBodyAcc-mean()-Z"          
-[28] "fBodyAccJerk-mean()-X"      
-[29] "fBodyAccJerk-mean()-Y"      
-[30] "fBodyAccJerk-mean()-Z"      
-[31] "fBodyGyro-mean()-X"         
-[32] "fBodyGyro-mean()-Y"         
-[33] "fBodyGyro-mean()-Z"         
-[34] "fBodyAccMag-mean()"         
-[35] "fBodyBodyAccJerkMag-mean()" 
-[36] "fBodyBodyGyroMag-mean()"    
-[37] "fBodyBodyGyroJerkMag-mean()"
-[38] "tBodyAcc-std()-X"           
-[39] "tBodyAcc-std()-Y"           
-[40] "tBodyAcc-std()-Z"           
-[41] "tGravityAcc-std()-X"        
-[42] "tGravityAcc-std()-Y"        
-[43] "tGravityAcc-std()-Z"        
-[44] "tBodyAccJerk-std()-X"       
-[45] "tBodyAccJerk-std()-Y"       
-[46] "tBodyAccJerk-std()-Z"       
-[47] "tBodyGyro-std()-X"          
-[48] "tBodyGyro-std()-Y"          
-[49] "tBodyGyro-std()-Z"          
-[50] "tBodyGyroJerk-std()-X"      
-[51] "tBodyGyroJerk-std()-Y"      
-[52] "tBodyGyroJerk-std()-Z"      
-[53] "tBodyAccMag-std()"          
-[54] "tGravityAccMag-std()"       
-[55] "tBodyAccJerkMag-std()"      
-[56] "tBodyGyroMag-std()"         
-[57] "tBodyGyroJerkMag-std()"     
-[58] "fBodyAcc-std()-X"           
-[59] "fBodyAcc-std()-Y"           
-[60] "fBodyAcc-std()-Z"           
-[61] "fBodyAccJerk-std()-X"       
-[62] "fBodyAccJerk-std()-Y"       
-[63] "fBodyAccJerk-std()-Z"       
-[64] "fBodyGyro-std()-X"          
-[65] "fBodyGyro-std()-Y"          
-[66] "fBodyGyro-std()-Z"          
-[67] "fBodyAccMag-std()"          
-[68] "fBodyBodyAccJerkMag-std()"  
-[69] "fBodyBodyGyroMag-std()"     
-[70] "fBodyBodyGyroJerkMag-std()" 
